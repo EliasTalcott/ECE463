@@ -8,10 +8,25 @@ SERVER = "httpserver"
 PORT = 2112
 
 server: httpserver.*.c
-	$(CC) httpserver.*.c -o $(SERVER)
+	$(CC) -g httpserver.*.c -o $(SERVER)
 
 listen:
 	./$(SERVER) $(PORT)
+
+testgetty:
+	./shift_client localhost $(PORT) texts/getty.txt 4
+
+testblocked:
+	./shift_client localhost $(PORT) texts/blocked.txt 0
+
+testnotfound:
+	./shift_client localhost $(PORT) texts/notfound.txt 0
+
+testshort:
+	./shift_client localhost $(PORT) texts/test_short.txt 9
+
+testlong:
+	./shift_client localhost $(PORT) texts/test_very_long.txt 0
 
 clean:
 	rm httpserver	
