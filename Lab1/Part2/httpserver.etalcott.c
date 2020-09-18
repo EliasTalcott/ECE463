@@ -103,6 +103,20 @@ void send_response(int connfd, char * req) {
 		i++;
 		j++;
 	}
+	int k = 1;
+	char temp;
+	char new_temp;
+	int path_length = strlen(filename);
+	if (filename[0] == '/') {
+		temp = filename[0];
+		filename[0] = '.';
+		while (k <= path_length) {
+		  	new_temp = filename[k];
+			filename[k] = temp;
+			temp = new_temp;
+			k++;
+		}
+	}
 	// Shift number
 	i++;
 	j = 0;
