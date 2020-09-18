@@ -198,19 +198,26 @@ int main(int argc, char **argv) {
 
   	while (1) {
     		// Open a connection with the client
-    		clientlen = sizeof(clientaddr); 
+		clientlen = sizeof(clientaddr); 
     		connfd = accept(listenfd, (struct sockaddr *)&clientaddr, &clientlen);
-    		hp = gethostbyaddr((const char *)&clientaddr.sin_addr.s_addr, sizeof(clientaddr.sin_addr.s_addr), AF_INET);
+		hp = gethostbyaddr((const char *)&clientaddr.sin_addr.s_addr, sizeof(clientaddr.sin_addr.s_addr), AF_INET);
 		haddrp = inet_ntoa(clientaddr.sin_addr);
-
-    		// Receive an HTTP request
-    		req = (char *) malloc(MAXLINE);
-		bzero(req, MAXLINE);
-		get_request(connfd, req);
 		
-    		// Send an HTTP response and close the connection
-		send_response(connfd, req);
-    		close(connfd);
+		// Time to get forky
+		int childpid;
+		if ((childpid = fork()) == 0) {
+		  	close(listenfd);
+
+    			// Receive an HTTP request
+    			req = (char *) malloc(MAXLINE);
+			bzero(req, MAXLINE);
+			get_request(connfd, req);
+		
+    			// Send an HTTP response and close the connection
+			send_response(connfd, req);
+			exit(0);
+    		}
+		close(connfd);
   	}
 }
 

@@ -4,11 +4,11 @@
 #3.Type "make test-very-long" to run the binary with "path_very_long.txt"
 #NOTE : Make sure to always run "make" after editing your ".c" file
 CC = gcc
-SERVER = "httpserver"
+SERVER = "httpserver_fork"
 PORT = 2112
 
-server: httpserver.*.c
-	$(CC) -g httpserver.*.c -o $(SERVER)
+server: httpserver_fork.*.c
+	$(CC) -g httpserver_fork.*.c -o $(SERVER)
 
 listen:
 	./$(SERVER) $(PORT)
@@ -29,4 +29,4 @@ testlong:
 	./shift_client localhost $(PORT) texts/test_very_long.txt 0
 
 clean:
-	rm httpserver	
+	rm httpserver_fork
